@@ -22,3 +22,6 @@ Logic/__pycache__/
 
 # Keep main.py
 !main.py
+
+# Keep app .zip
+!dist/Tetris-macOS.zip
