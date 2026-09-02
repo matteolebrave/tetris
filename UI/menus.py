@@ -26,6 +26,17 @@ DANGER_HOVER_COLOR = "#FF78A5"
 ACCENT_PURPLE = "#B89CFF"
 PURPLE_HOVER = "#CBB8FF"
 
+# ============================================================
+# DIFFICULTY
+# ============================================================
+
+DIFFICULTY_NAMES = [
+    "🌸 FACILE",
+    "💗 NORMAL",
+    "💜 DIFFICILE",
+    "🔥 EXPERT"
+]
+
 
 # ============================================================
 # HELPERS
@@ -120,6 +131,8 @@ class HomeUI:
 
         self.root = root
         self.start_game = start_game
+
+        self.difficulty = 1
 
         # ----------------------------------------------------
         # WINDOW
@@ -245,15 +258,140 @@ class HomeUI:
         )
 
         # ----------------------------------------------------
+        # DIFFICULTY
+        # ----------------------------------------------------
+
+        difficulty_title = tk.Label(
+            self.frame,
+            text="♡  DIFFICULTÉ  ♡",
+            font=("Arial", 9, "bold"),
+            fg=SECONDARY_TEXT_COLOR,
+            bg=CARD_COLOR
+        )
+
+        difficulty_title.pack(
+            pady=(0, 8)
+        )
+
+        difficulty_frame = tk.Frame(
+            self.frame,
+            bg=CARD_COLOR
+        )
+
+        difficulty_frame.pack(
+            pady=(0, 15)
+        )
+
+
+        def decrease_difficulty():
+            if self.difficulty > 1:
+                self.difficulty -= 1
+                update_difficulty()
+
+
+        def increase_difficulty():
+            if self.difficulty < 4:
+                self.difficulty += 1
+                update_difficulty()
+
+
+        self.difficulty_minus = tk.Button(
+            difficulty_frame,
+            text="−",
+            font=("Arial", 18, "bold"),
+            fg=TEXT_COLOR,
+            bg=BUTTON_COLOR,
+            activeforeground=TEXT_COLOR,
+            activebackground=BUTTON_HOVER_COLOR,
+            width=3,
+            height=1,
+            borderwidth=0,
+            relief="flat",
+            cursor="hand2",
+            command=decrease_difficulty
+        )
+
+        self.difficulty_minus.pack(
+            side="left",
+            padx=8
+        )
+
+        self.difficulty_label = tk.Label(
+            difficulty_frame,
+            text="1 / 4\n🌸 FACILE",
+            font=("Arial", 11, "bold"),
+            fg=TITLE_COLOR,
+            bg=CARD_COLOR,
+            width=14,
+            height=2
+        )
+
+        self.difficulty_label.pack(
+            side="left"
+        )
+
+        self.difficulty_plus = tk.Button(
+            difficulty_frame,
+            text="+",
+            font=("Arial", 18, "bold"),
+            fg=TEXT_COLOR,
+            bg=BUTTON_COLOR,
+            activeforeground=TEXT_COLOR,
+            activebackground=BUTTON_HOVER_COLOR,
+            width=3,
+            height=1,
+            borderwidth=0,
+            relief="flat",
+            cursor="hand2",
+            command=increase_difficulty
+        )
+
+        self.difficulty_plus.pack(
+            side="left",
+            padx=8
+        )
+
+
+        def update_difficulty():
+            name = DIFFICULTY_NAMES[self.difficulty - 1]
+
+            self.difficulty_label.configure(
+                text=f"{self.difficulty} / 4\n{name}"
+            )
+
+            # Désactive le bouton − au niveau 1
+            if self.difficulty == 1:
+                self.difficulty_minus.configure(
+                    fg=SECONDARY_TEXT_COLOR
+                )
+            else:
+                self.difficulty_minus.configure(
+                    fg=TEXT_COLOR
+                )
+
+            # Désactive le bouton + au niveau 4
+            if self.difficulty == 4:
+                self.difficulty_plus.configure(
+                    fg=SECONDARY_TEXT_COLOR
+                )
+            else:
+                self.difficulty_plus.configure(
+                    fg=TEXT_COLOR
+                )
+
+
+
+        # ----------------------------------------------------
         # PLAY BUTTON
         # ----------------------------------------------------
 
         self.play_button = create_button(
             self.frame,
             "♡   JOUER",
-            self.start_game,
+            lambda: self.start_game(self.difficulty),
             accent=True
         )
+
 
         self.play_button.pack(
             pady=7

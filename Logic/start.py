@@ -1,7 +1,7 @@
 import tkinter as tk
 from random import randint
 
-from Logic.parameters import WIDTH, HEIGHT, SPEED, MOVE_DELAY
+from Logic.parameters import WIDTH, HEIGHT, MOVE_DELAY
 from Logic.logic import Piece, move_piece, rotate_piece, check_collision
 from Logic.shapes import T, S, Z, O, L, J, I
 
@@ -9,6 +9,14 @@ from UI.game_ui import GameUI
 
 
 SHAPES = [T, S, Z, O, L, J, I]
+
+DIFFICULTY_SPEEDS = {
+    1: 800,  # Facile
+    2: 600,  # Normal
+    3: 400,  # Difficile
+    4: 200   # Expert
+}
+
 
 def create_empty_grid():
     return [[0 for _ in range(WIDTH)] for _ in range(HEIGHT)]
@@ -27,10 +35,12 @@ def is_game_over(piece, grid):
     return check_collision(piece, grid, 0, 0, 0)
 
 
-def mainloop():
+def mainloop(difficulty):
     grid = create_empty_grid()
     piece = create_piece()
 
+    SPEED = DIFFICULTY_SPEEDS[difficulty]
+    print(f"Vitesse : {SPEED}")
     root = tk.Tk()
 
     ui = GameUI(root)
@@ -108,8 +118,10 @@ def mainloop():
     root.bind("<KeyRelease>", on_key_release)
 
     def game_loop():
-        nonlocal grid, piece, game_started
+        nonlocal grid, piece, game_started, SPEED
 
+
+        print(f"Nouvelle vitesse : {SPEED}")
         if not game_started:
             return
 
@@ -124,7 +136,8 @@ def mainloop():
             print("Pièce verrouillée !")
 
             piece = create_piece()
-
+            SPEED = max(100, SPEED - 2)
+            
             if is_game_over(piece, grid):
                 print("GAME OVER")
                 root.destroy()
