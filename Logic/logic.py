@@ -1,4 +1,4 @@
-from parameters import WIDTH, HEIGHT, SPEED
+from Logic.parameters import WIDTH, HEIGHT, SPEED
 
 class Piece:
     def __init__(self, shape, rotation, posX, posY):
