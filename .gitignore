@@ -9,15 +9,16 @@
 
 # Keep directories
 !Logic/
-!Map/
-!templates/
-!static/
+!UI/
+
 
 # Keep everything inside them
 !Logic/**
-!Map/**
-!templates/**
-!static/**
+!UI/**
+
+# Ignore Python caches
+UI/__pycache__/
+Logic/__pycache__/
 
 # Keep main.py
 !main.py
